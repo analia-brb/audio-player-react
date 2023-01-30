@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const Home = () => {
-  const [urlDir, setUrlDir] = useState("");
+  let [urlDir, setUrlDir] = useState("");
   const [music, setMusic] = useState([]);
 
   let [currentSong, setCurrentSong] = useState("")
@@ -9,10 +9,11 @@ const Home = () => {
   let audioRef = useRef()
 
   const handleClick = (event, key, title) => {
-    setUrlDir("https://assets.breatheco.de/apis/sound" + key);
+    setUrlDir("https://assets.breatheco.de/apis/sound/" + key);
   setCurrentSong(title);
+
   if (isPlaying) {
-    setIsPlaying(false);
+    setIsPlaying(false)
   }
 };
 
@@ -25,8 +26,8 @@ const Home = () => {
   const playNext = () =>
   {
     for (let i=0; i < music.length; i++) {
-      let a = i
-      a = a + 1
+      let a = i;
+      a = a + 1;
       let lastSong = music.length -1;
       let firstSong = 0; 
       if ("https://assets.breatheco.de/apis/sound/"+music[i].url === urlDir)
@@ -35,22 +36,35 @@ const Home = () => {
         setIsPlaying(false)
         setCurrentSong(music[a].name)
        }
+       if("https://assets.breatheco.de/apis/sound/"+music[lastSong].url === urlDir){
+        setIsPlaying(false)
+        setUrlDir("https://assets.breatheco.de/apis/sound/"+music[firstSong].url)
+        setCurrentSong(music[firstSong].name)
       }
-    }
+    }}
 
     const playPrevious = () => {
-      for (let i = 0; i < music-length; i++)
+      for (let i = 0; i < music.length; i++)
       {
         let a = i
         a = a -1
-        if ("https://assets.breatheco.de/apis/sound/"+music[i].url === urlDir)
-        {
-          setUrlDir("https://assets.breatheco.de/apis/sound/"+music[a].url)
-          setIsPlaying(false)
-          setCurrentSong(music[a].name)
+
+        let lastSong = music.length - 1;
+      let firstSong = 0; 
+
+      if ("https://assets.breatheco.de/apis/sound/"+music[i].url === urlDir) 
+      {               
+      if("https://assets.breatheco.de/apis/sound/"+music[firstSong].url === urlDir){
+        setIsPlaying(false)
+        setUrlDir("https://assets.breatheco.de/apis/sound/"+music[lastSong].url)
+        setCurrentSong(music[lastSong].name)
+      }else{
+setUrlDir("https://assets.breatheco.de/apis/sound/"+music[a].url)
+        setIsPlaying(false)
+        setCurrentSong(music[a].name)
         }
       }
-    }
+    }}
 
     const play = () =>{
       const audio = audioRef.current
@@ -68,7 +82,7 @@ const Home = () => {
       }
   
   return (
-  <div className="container">
+    <div className="container">
       <div id="interface" className="interfaceClass">
         <div id="header" className="headerClass text-light text-center m-auto">
           <h5 className="p-2">BreatheCode Orange Mario Bros Player</h5>
@@ -81,7 +95,7 @@ const Home = () => {
                 onClick={event => handleClick(event, item.url, item.name)}
                 className="claseElemento m-1 text-center"
                 key={item.url}>{item.name}
-              </div>)}
+              </div>)} </div>
               </div>
 
             <div className="text-light text-center p-1">
@@ -103,7 +117,7 @@ const Home = () => {
           </div>
         </div>
     </div>
-  );;
-};
+    );;
+            };
 
 export default Home;
